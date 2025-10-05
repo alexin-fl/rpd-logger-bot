@@ -1,8 +1,17 @@
 require('dotenv').config();
 const { Client, GatewayIntentBits, PermissionsBitField } = require('discord.js');
 const fs = require('fs');
+const express = require('express'); // added web server
 
-// Create bot client
+// ------------------ Web server to keep bot awake ------------------
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.get('/', (req, res) => res.send('Bot is alive!'));
+
+app.listen(PORT, () => console.log(`🌐 Web server running on port ${PORT}`));
+
+// ------------------ Discord Bot ------------------
 const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers]
 });
@@ -44,4 +53,5 @@ client.on('guildMemberAdd', async (member) => {
   }
 });
 
+// ------------------ Login using environment variable ------------------
 client.login(process.env.TOKEN);
